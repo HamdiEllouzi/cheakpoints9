@@ -1,12 +1,24 @@
-import axios from "axios"
-import { useEffect,useState } from 'react';
-
+import { useSelector } from "react-redux"
+import { useState } from "react";
+import './App.css';
 export const UserList = () => {
-    const [listOfUSer, setListOfUSer] = useState([]);
-    useEffect(() => {
-        axios.get('https://jsonplaceholder.typicode.com/users').then((e) => {
-            setListOfUSer(e.data)
-        })
-    }, []);
-    return <ul>{listOfUSer.map(v=><li key={v.id}>{v.name}</li>)}</ul>
+    const [toggle, setToggle] = useState(false);
+    const [info, setInfo] = useState('');
+    const user = useSelector((state) => state.listeofuser.user)
+    const toggleButton = (e) => {
+        return((toggle) &&
+        <div className='cardInfo'>
+            <h1>{info.name}</h1>
+            <h1>{info.email}</h1>
+            <h1>{info.phone}</h1>
+            <h1>{info.website}</h1>
+            <button onClick={()=>setToggle(false)}>Close</button>
+        </div>)
+    }    
+    return (
+    <div>
+        {toggleButton()}
+        <ul>{user.map(v => <li key={v.id} ><button onClick={()=>{setInfo(v);setToggle(!toggle)}}>{v.name}</button></li>)}</ul>
+    </div>
+)
 }
